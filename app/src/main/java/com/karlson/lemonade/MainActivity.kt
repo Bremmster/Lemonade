@@ -5,14 +5,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,11 +40,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LemonadeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MakeLemonade(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MakeLemonade()
             }
         }
     }
@@ -52,50 +52,74 @@ fun MakeLemonade(modifier: Modifier = Modifier) {
     var squeezesRequired: Int by remember { mutableIntStateOf(2) }
     var squeezesDone: Int by remember { mutableIntStateOf(0) }
 
-    Column(
-        modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        modifier
+            .fillMaxSize()
     ) {
-        Button(
-            onClick = {
-                lemonadeState = when (lemonadeState) {
-                    LemonadeState.TREE -> {
-                        squeezesRequired = (2..4).random()
-                        LemonadeState.LEMON
-                    }
-
-                    LemonadeState.LEMON -> {
-                        squeezesDone++
-                        if (squeezesDone >= squeezesRequired) {
-                            squeezesDone = 0
-                            LemonadeState.LEMONADE_GLASS
-                        } else {
-                            LemonadeState.LEMON
-                        }
-                    }
-
-                    LemonadeState.LEMONADE_GLASS -> LemonadeState.EMPTY_GLASS
-                    LemonadeState.EMPTY_GLASS -> LemonadeState.TREE
-                }
-            },
-            colors = ButtonColors(
-                contentColor = Color(0xFFC3ECD2),
-                containerColor = Color(0xFFC3ECD2),
-                disabledContainerColor = Color(0xFFC3ECD2),
-                disabledContentColor = Color(0xFFC3ECD2)
-            ),
+        Column(
+            Modifier
+                .align(Alignment.TopCenter)
+                .background(Color(0xFFFFEB3B))
+                .fillMaxWidth()
+                .padding(top = 16.dp)
         ) {
-            Image(
-                painterResource(getImage(lemonadeState)),
-                contentDescription = stringResource(getContentDescription(lemonadeState)),
+            Text(
+                text = "Lemonade",
+                fontSize = 18.sp,
+                fontWeight = FontWeight(
+                    weight = 800
+                ),
+                modifier = modifier
+                    .padding(16.dp)
+                    .align(Alignment.CenterHorizontally),
             )
         }
-        Spacer(Modifier.height(16.dp))
-        Text(
-            text = stringResource(getText(lemonadeState)),
-            fontSize = 18.sp,
-            modifier = modifier
-        )
+        Column(
+            Modifier.align(Alignment.Center),
+        ) {
+            Button(
+                onClick = {
+                    lemonadeState = when (lemonadeState) {
+                        LemonadeState.TREE -> {
+                            squeezesRequired = (2..4).random()
+                            LemonadeState.LEMON
+                        }
+
+                        LemonadeState.LEMON -> {
+                            squeezesDone++
+                            if (squeezesDone >= squeezesRequired) {
+                                squeezesDone = 0
+                                LemonadeState.LEMONADE_GLASS
+                            } else {
+                                LemonadeState.LEMON
+                            }
+                        }
+
+                        LemonadeState.LEMONADE_GLASS -> LemonadeState.EMPTY_GLASS
+                        LemonadeState.EMPTY_GLASS -> LemonadeState.TREE
+                    }
+                },
+                colors = ButtonColors(
+                    contentColor = Color(0xFFC3ECD2),
+                    containerColor = Color(0xFFC3ECD2),
+                    disabledContainerColor = Color(0xFFC3ECD2),
+                    disabledContentColor = Color(0xFFC3ECD2)
+                ),
+                shape = RoundedCornerShape(24.dp),
+                modifier = modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Image(
+                    painterResource(getImage(lemonadeState)),
+                    contentDescription = stringResource(getContentDescription(lemonadeState)),
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            Text(
+                text = stringResource(getText(lemonadeState)),
+                fontSize = 18.sp,
+                modifier = modifier.align(Alignment.CenterHorizontally)
+            )
+        }
     }
 }
 
