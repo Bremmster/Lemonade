@@ -64,7 +64,7 @@ fun MakeLemonade(modifier: Modifier = Modifier) {
                 .padding(top = 16.dp)
         ) {
             Text(
-                text = "Lemonade",
+                text = stringResource(R.string.lemonade),
                 fontSize = 18.sp,
                 fontWeight = FontWeight(
                     weight = 800
